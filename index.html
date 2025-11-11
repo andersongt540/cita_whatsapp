@@ -1,216 +1,212 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reserva tu Cita Rápida | WhatsApp</title>
-<!-- Carga de Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-body {
-font-family: 'Inter', sans-serif;
-background-color: #f7f9fb;
-}
-.whatsapp-green {
-background-color: #25d366;
-transition: background-color 0.3s;
-}
-.whatsapp-green:hover {
-background-color: #128c7e;
-}
-.card-shadow {
-box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva tu Cita Rápida | WhatsApp</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        .whatsapp-green {
+            background-color: #25d366;
+            transition: background-color 0.3s;
+        }
+        .whatsapp-green:hover {
+            background-color: #128c7e;
+        }
+        .card-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+    </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-<div id="app" class="w-full max-w-lg bg-white p-6 md:p-10 rounded-xl card-shadow border border-gray-100">
+    <div id="app" class="w-full max-w-lg bg-white p-6 md:p-10 rounded-xl card-shadow border border-gray-100">
 
-    <!-- Header -->
-    <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Agendar Cita Rápida</h1>
-        <p class="text-gray-500 mt-2">Completa el formulario y recibiré la solicitud directamente por WhatsApp.</p>
-    </div>
-
-    <!-- Formulario -->
-    <form id="appointment-form" class="space-y-6">
-        
-        <!-- Nombre del Cliente -->
-        <div>
-            <label for="client-name" class="block text-sm font-medium text-gray-700 mb-1">Tu Nombre Completo</label>
-            <input type="text" id="client-name" name="client-name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150" placeholder="Ej: Juan Pérez">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Agendar Cita Rápida</h1>
+            <p class="text-gray-500 mt-2">Completa el formulario y recibiré la solicitud directamente por WhatsApp.</p>
         </div>
 
-        <!-- Servicio Requerido (Actualizado con tu opción) -->
-        <div>
-            <label for="service" class="block text-sm font-medium text-gray-700 mb-1">Servicio que deseas</label>
-            <select id="service" name="service" required class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 transition duration-150">
-                <option value="">-- Selecciona un servicio --</option>
-                <option value="Cirugia general">Cirugia general</option>
-                <option value="Consulta General">Consulta General</option>
-                <option value="Revisión">Revisión</option>
-                <option value="Otro Servicio">Otro (Especificar)</option>
-            </select>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Fecha -->
-            <div>
-                <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Fecha Preferida</label>
-                <input type="date" id="date" name="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
-            </div>
+        <!-- Formulario -->
+        <form id="appointment-form" class="space-y-6">
             
-            <!-- Hora -->
+            <!-- Nombre del Cliente -->
             <div>
-                <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Hora Preferida</label>
-                <input type="time" id="time" name="time" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                <label for="client-name" class="block text-sm font-medium text-gray-700 mb-1">Tu Nombre Completo</label>
+                <input type="text" id="client-name" name="client-name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150" placeholder="Ej: Juan Pérez">
             </div>
-        </div>
 
-        <!-- Botón de Envío -->
-        <button type="submit" class="w-full flex items-center justify-center whatsapp-green text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-green-300 transition duration-200 ease-in-out">
-            <!-- Icono de WhatsApp (Inline SVG) -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
-                <path d="M12.035 2.177a9.887 9.887 0 0 0-8.948 5.437A9.887 9.887 0 0 0 2.177 12c0 1.748.435 3.496 1.298 4.966L2 22l5.244-1.378a9.887 9.887 0 0 0 4.79-1.28A9.887 9.887 0 0 0 21.823 12a9.887 9.887 0 0 0-9.788-9.823zM12 20.158a8.158 8.158 0 0 1-4.882-1.574L6.963 18l-3.376.885.892-3.238L4.35 15.65c-.754-1.293-1.157-2.784-1.157-4.305A8.158 8.158 0 0 1 12 3.842a8.158 8.158 0 0 1 7.749 5.836A8.158 8.158 0 0 1 12 20.158zM17.16 13.993c-.092-.05-.56-.273-.65-.304-.09-.03-.158-.046-.226.046-.07.092-.258.304-.316.366-.058.06-.12.064-.222.032-.1-.03-.432-.158-.823-.508-.304-.265-.51-.592-.578-.7-.068-.11-.008-.17-.008-.23.003-.06.007-.11.008-.158.002-.045 0-.09-.046-.14-.047-.05-.27-.123-.374-.15-.104-.027-.188-.035-.226-.035-.038 0-.097.006-.15.06-.053.05-.205.24-.205.584 0 .344.21.673.24.72.03.047.412.63.996.88.583.25 1.05.207 1.402.19.35-.015.56-.16.65-.31.09-.15.258-.887.258-.946-.002-.06-.092-.092-.184-.14z"/>
-            </svg>
-            ENVIAR SOLICITUD DE CITA POR WHATSAPP
-        </button>
-    </form>
+            <!-- Servicio Requerido (Actualizado con tu opción) -->
+            <div>
+                <label for="service" class="block text-sm font-medium text-gray-700 mb-1">Servicio que deseas</label>
+                <select id="service" name="service" required class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                    <option value="">-- Selecciona un servicio --</option>
+                    <option value="Cirugia general">Cirugia general</option>
+                    <option value="Consulta General">Consulta General</option>
+                    <option value="Revisión">Revisión</option>
+                    <option value="Otro Servicio">Otro (Especificar)</option>
+                </select>
+            </div>
 
-    <!-- Mensaje de Confirmación (Oculto inicialmente) -->
-    <div id="success-message" class="hidden mt-6 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg relative" role="alert">
-        <strong class="font-bold">¡Cita casi lista!</strong>
-        <span class="block sm:inline"> Se ha abierto tu WhatsApp con el mensaje pre-llenado. Solo haz click en "Enviar" para que me llegue la solicitud.</span>
-    </div>
-    
-</div>
-
-<script>
-    // Función para obtener la hora actual en formato HH:MM (añade 1 minuto de margen)
-    function getCurrentTime() {
-        const now = new Date();
-        // Añadir 1 minuto para asegurar que la hora actual no sea seleccionable
-        const minutes = now.getMinutes() + 1;
-        now.setMinutes(minutes);
-        
-        const hours = String(now.getHours()).padStart(2, '0');
-        const newMinutes = String(now.getMinutes()).padStart(2, '0');
-        return `${hours}:${newMinutes}`;
-    }
-
-    // Función para obtener la fecha actual en formato YYYY-MM-DD
-    function getCurrentDate() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-
-    // Configura las restricciones de fecha y hora
-    function setupDateTimeRestrictions() {
-        const dateInput = document.getElementById('date');
-        const timeInput = document.getElementById('time');
-        const todayDate = getCurrentDate();
-        
-        // 1. Establece la fecha mínima para el campo de fecha (no permite fechas anteriores a hoy)
-        dateInput.min = todayDate;
-
-        // 2. Función para aplicar la restricción de hora
-        const applyTimeRestriction = () => {
-            // Si la fecha seleccionada es HOY
-            if (dateInput.value === todayDate) {
-                timeInput.min = getCurrentTime();
-            } else {
-                // Si la fecha es futura o no hay fecha seleccionada, elimina la restricción de hora mínima
-                timeInput.removeAttribute('min');
-            }
-            
-            // Si el valor actual de la hora es menor que el mínimo, lo resetea para evitar errores de validación
-            if (timeInput.value && timeInput.min && timeInput.value < timeInput.min) {
-                 timeInput.value = '';
-            }
-        };
-        
-        // Ejecuta la función al inicio y cada vez que la fecha cambie
-        applyTimeRestriction();
-        dateInput.addEventListener('change', applyTimeRestriction);
-    }
-
-    // Espera a que el DOM esté completamente cargado antes de ejecutar el setup
-    document.addEventListener('DOMContentLoaded', setupDateTimeRestrictions);
-
-    document.getElementById('appointment-form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Evita el envío tradicional del formulario
-
-        // --- Configuración de tu número de WhatsApp ---
-        // NÚMERO USADO: 584241699219
-        const YOUR_WHATSAPP_NUMBER = '584241699219'; 
-        // ---------------------------------------------
-        
-        const clientName = document.getElementById('client-name').value.trim();
-        const service = document.getElementById('service').value;
-        const date = document.getElementById('date').value;
-        const time = document.getElementById('time').value;
-        
-        // Validar que la fecha y hora seleccionada no sea pasada (doble chequeo)
-        const selectedDateTime = new Date(`${date}T${time}:00`);
-        const now = new Date();
-
-        if (selectedDateTime < now) {
-             // Usamos un modal o mensaje en lugar de alert()
-             const validationMessage = document.createElement('div');
-             validationMessage.className = 'fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50';
-             validationMessage.innerHTML = `
-                 <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm text-center">
-                    <h3 class="text-xl font-bold mb-3 text-red-600">⚠️ Error de Cita</h3>
-                    <p class="mb-4 text-gray-700">No puedes seleccionar una fecha u hora que ya ha pasado. Por favor, elige una hora y fecha a partir de ahora.</p>
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-150" onclick="this.parentElement.parentElement.remove()">Entendido</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Fecha -->
+                <div>
+                    <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Fecha Preferida</label>
+                    <input type="date" id="date" name="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
                 </div>
-             `;
-             document.body.appendChild(validationMessage);
-             return; // Detener el envío del formulario
+                
+                <!-- Hora -->
+                <div>
+                    <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Hora Preferida</label>
+                    <input type="time" id="time" name="time" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                </div>
+            </div>
+
+            <!-- Botón de Envío -->
+            <button type="submit" class="w-full flex items-center justify-center whatsapp-green text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-green-300 transition duration-200 ease-in-out">
+                <!-- Icono de WhatsApp (Inline SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
+                    <path d="M12.035 2.177a9.887 9.887 0 0 0-8.948 5.437A9.887 9.887 0 0 0 2.177 12c0 1.748.435 3.496 1.298 4.966L2 22l5.244-1.378a9.887 9.887 0 0 0 4.79-1.28A9.887 9.887 0 0 0 21.823 12a9.887 9.887 0 0 0-9.788-9.823zM12 20.158a8.158 8.158 0 0 1-4.882-1.574L6.963 18l-3.376.885.892-3.238L4.35 15.65c-.754-1.293-1.157-2.784-1.157-4.305A8.158 8.158 0 0 1 12 3.842a8.158 8.158 0 0 1 7.749 5.836A8.158 8.158 0 0 1 12 20.158zM17.16 13.993c-.092-.05-.56-.273-.65-.304-.09-.03-.158-.046-.226.046-.07.092-.258.304-.316.366-.058.06-.12.064-.222.032-.1-.03-.432-.158-.823-.508-.304-.265-.51-.592-.578-.7-.068-.11-.008-.17-.008-.23.003-.06.007-.11.008-.158.002-.045 0-.09-.046-.14-.047-.05-.27-.123-.374-.15-.104-.027-.188-.035-.226-.035-.038 0-.097.006-.15.06-.053.05-.205.24-.205.584 0 .344.21.673.24.72.03.047.412.63.996.88.583.25 1.05.207 1.402.19.35-.015.56-.16.65-.31.09-.15.258-.887.258-.946-.002-.06-.092-.092-.184-.14z"/>
+                </svg>
+                ENVIAR SOLICITUD DE CITA POR WHATSAPP
+            </button>
+        </form>
+
+        <!-- Mensaje de Confirmación (Oculto inicialmente) -->
+        <div id="success-message" class="hidden mt-6 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg relative" role="alert">
+            <strong class="font-bold">¡Cita casi lista!</strong>
+            <span class="block sm:inline"> Se ha abierto tu WhatsApp con el mensaje pre-llenado. Solo haz click en "Enviar" para que me llegue la solicitud.</span>
+        </div>
+        
+    </div>
+
+    <script>
+        // Función para obtener la hora actual en formato HH:MM (añade 1 minuto de margen)
+        function getCurrentTime() {
+            const now = new Date();
+            // Añadir 1 minuto para asegurar que la hora actual no sea seleccionable
+            const minutes = now.getMinutes() + 1;
+            now.setMinutes(minutes);
+            
+            const hours = String(now.getHours()).padStart(2, '0');
+            const newMinutes = String(now.getMinutes()).padStart(2, '0');
+            return `${hours}:${newMinutes}`;
         }
 
-        // Formatear la fecha a un formato más legible (DD/MM/AAAA)
-        const dateParts = date.split('-');
-        const formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+        // Función para obtener la fecha actual en formato YYYY-MM-DD
+        function getCurrentDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
 
-        // CREACIÓN DEL MENSAJE: USANDO %0A PARA LOS SALTOS DE LÍNEA
-        let message = `*¡NUEVA SOLICITUD DE CITA!*%0A%0A`; // Encabezado con 2 saltos de línea
-        message += ` *Cliente:* ${clientName}%0A`;
-        message += ` *Servicio:* ${service}%0A`;
-        message += ` *Fecha Solicitada:* ${formattedDate}%0A`;
-        message += ` *Hora Solicitada:* ${time}%0A%0A`; // 2 saltos de línea antes del cierre
-        message += `*¡Por favor, confírmame esta cita!*`;
+        // Configura las restricciones de fecha y hora
+        function setupDateTimeRestrictions() {
+            const dateInput = document.getElementById('date');
+            const timeInput = document.getElementById('time');
+            const todayDate = getCurrentDate();
+            
+            // 1. Establece la fecha mínima para el campo de fecha (no permite fechas anteriores a hoy)
+            dateInput.min = todayDate;
 
-        // Codificar el mensaje para la URL
-        const encodedMessage = encodeURIComponent(message);
+            // 2. Función para aplicar la restricción de hora
+            const applyTimeRestriction = () => {
+                // Si la fecha seleccionada es HOY
+                if (dateInput.value === todayDate) {
+                    timeInput.min = getCurrentTime();
+                } else {
+                    // Si la fecha es futura o no hay fecha seleccionada, elimina la restricción de hora mínima
+                    timeInput.removeAttribute('min');
+                }
+                
+                // Si el valor actual de la hora es menor que el mínimo, lo resetea para evitar errores de validación
+                if (timeInput.value && timeInput.min && timeInput.value < timeInput.min) {
+                     timeInput.value = '';
+                }
+            };
+            
+            // Ejecuta la función al inicio y cada vez que la fecha cambie
+            applyTimeRestriction();
+            dateInput.addEventListener('change', applyTimeRestriction);
+        }
 
-        // Crear el enlace de WhatsApp
-        const whatsappUrl = `https://wa.me/${YOUR_WHATSAPP_NUMBER}?text=${encodedMessage}`;
+        // Espera a que el DOM esté completamente cargado antes de ejecutar el setup
+        document.addEventListener('DOMContentLoaded', setupDateTimeRestrictions);
 
-        // Abrir el enlace en una nueva pestaña
-        window.open(whatsappUrl, '_blank');
+        document.getElementById('appointment-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita el envío tradicional del formulario
 
-        // Mostrar mensaje de éxito/instrucción
-        const successMessage = document.getElementById('success-message');
-        successMessage.classList.remove('hidden');
-        
-        // Opcional: limpiar el formulario después del envío
-        document.getElementById('appointment-form').reset();
-        
-        // Opcional: ocultar el mensaje de éxito después de 5 segundos
-        setTimeout(() => {
-            successMessage.classList.add('hidden');
-        }, 5000);
-    });
-</script>
+            // --- Configuración de tu número de WhatsApp ---
+            // NÚMERO USADO: 584241699219
+            const YOUR_WHATSAPP_NUMBER = '584241699219'; 
+            // ---------------------------------------------
+            
+            const clientName = document.getElementById('client-name').value.trim();
+            const service = document.getElementById('service').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            
+            // Validar que la fecha y hora seleccionada no sea pasada (doble chequeo)
+            const selectedDateTime = new Date(`${date}T${time}:00`);
+            const now = new Date();
 
+            if (selectedDateTime < now) {
+                 // Usamos un modal o mensaje en lugar de alert()
+                 const validationMessage = document.createElement('div');
+                 validationMessage.className = 'fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50';
+                 validationMessage.innerHTML = `
+                     <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm text-center">
+                        <h3 class="text-xl font-bold mb-3 text-red-600">⚠️ Error de Cita</h3>
+                        <p class="mb-4 text-gray-700">No puedes seleccionar una fecha u hora que ya ha pasado. Por favor, elige una hora y fecha a partir de ahora.</p>
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-150" onclick="this.parentElement.parentElement.remove()">Entendido</button>
+                    </div>
+                 `;
+                 document.body.appendChild(validationMessage);
+                 return; // Detener el envío del formulario
+            }
 
+            // Formatear la fecha a un formato más legible (DD/MM/AAAA)
+            const dateParts = date.split('-');
+            const formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+
+            // CREACIÓN DEL MENSAJE: AJUSTADO EL ESPACIADO CON %0A%0A PARA UNA LÍNEA VACÍA ENTRE CADA DATO
+            let message = `*¡NUEVA SOLICITUD DE CITA!*%0A%0A`; // Encabezado + 1 línea vacía
+            message += `👤 *Cliente:* ${clientName}%0A%0A`; // Cliente + 1 línea vacía
+            message += `🛠️ *Servicio:* ${service}%0A%0A`; // Servicio + 1 línea vacía
+            message += `📅 *Fecha Solicitada:* ${formattedDate}%0A`; // Fecha (manteniendo Hora en la línea siguiente)
+            message += `⏰ *Hora Solicitada:* ${time}%0A%0A`; // Hora + 1 línea vacía antes del mensaje final
+            message += `*¡Por favor, confírmame esta cita!*`;
+
+            // Codificar el mensaje para la URL
+            const encodedMessage = encodeURIComponent(message);
+
+            // Crear el enlace de WhatsApp
+            const whatsappUrl = `https://wa.me/${YOUR_WHATSAPP_NUMBER}?text=${encodedMessage}`;
+
+            // Abrir el enlace en una nueva pestaña
+            window.open(whatsappUrl, '_blank');
+
+            // Mostrar mensaje de éxito/instrucción
+            const successMessage = document.getElementById('success-message');
+            successMessage.classList.remove('hidden');
+            
+            // Opcional: limpiar el formulario después del envío
+            document.getElementById('appointment-form').reset();
+            
+            // Opcional: ocultar el mensaje de éxito después de 5 segundos
+            setTimeout(() => {
+                successMessage.classList.add('hidden');
+            }, 5000);
+        });
+    </script>
 </body>
 </html>
-
