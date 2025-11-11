@@ -89,6 +89,60 @@ box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0
 </div>
 
 <script>
+    // Función para obtener la hora actual en formato HH:MM (añade 1 minuto de margen)
+    function getCurrentTime() {
+        const now = new Date();
+        // Añadir 1 minuto para asegurar que la hora actual no sea seleccionable
+        const minutes = now.getMinutes() + 1;
+        now.setMinutes(minutes);
+        
+        const hours = String(now.getHours()).padStart(2, '0');
+        const newMinutes = String(now.getMinutes()).padStart(2, '0');
+        return `${hours}:${newMinutes}`;
+    }
+
+    // Función para obtener la fecha actual en formato YYYY-MM-DD
+    function getCurrentDate() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // Configura las restricciones de fecha y hora
+    function setupDateTimeRestrictions() {
+        const dateInput = document.getElementById('date');
+        const timeInput = document.getElementById('time');
+        const todayDate = getCurrentDate();
+        
+        // 1. Establece la fecha mínima para el campo de fecha (no permite fechas anteriores a hoy)
+        dateInput.min = todayDate;
+
+        // 2. Función para aplicar la restricción de hora
+        const applyTimeRestriction = () => {
+            // Si la fecha seleccionada es HOY
+            if (dateInput.value === todayDate) {
+                timeInput.min = getCurrentTime();
+            } else {
+                // Si la fecha es futura o no hay fecha seleccionada, elimina la restricción de hora mínima
+                timeInput.removeAttribute('min');
+            }
+            
+            // Si el valor actual de la hora es menor que el mínimo, lo resetea para evitar errores de validación
+            if (timeInput.value && timeInput.min && timeInput.value < timeInput.min) {
+                 timeInput.value = '';
+            }
+        };
+        
+        // Ejecuta la función al inicio y cada vez que la fecha cambie
+        applyTimeRestriction();
+        dateInput.addEventListener('change', applyTimeRestriction);
+    }
+
+    // Espera a que el DOM esté completamente cargado antes de ejecutar el setup
+    document.addEventListener('DOMContentLoaded', setupDateTimeRestrictions);
+
     document.getElementById('appointment-form').addEventListener('submit', function(event) {
         event.preventDefault(); // Evita el envío tradicional del formulario
 
@@ -101,6 +155,25 @@ box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0
         const service = document.getElementById('service').value;
         const date = document.getElementById('date').value;
         const time = document.getElementById('time').value;
+        
+        // Validar que la fecha y hora seleccionada no sea pasada (doble chequeo)
+        const selectedDateTime = new Date(`${date}T${time}:00`);
+        const now = new Date();
+
+        if (selectedDateTime < now) {
+             // Usamos un modal o mensaje en lugar de alert()
+             const validationMessage = document.createElement('div');
+             validationMessage.className = 'fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50';
+             validationMessage.innerHTML = `
+                 <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm text-center">
+                    <h3 class="text-xl font-bold mb-3 text-red-600">⚠️ Error de Cita</h3>
+                    <p class="mb-4 text-gray-700">No puedes seleccionar una fecha u hora que ya ha pasado. Por favor, elige una hora y fecha a partir de ahora.</p>
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-150" onclick="this.parentElement.parentElement.remove()">Entendido</button>
+                </div>
+             `;
+             document.body.appendChild(validationMessage);
+             return; // Detener el envío del formulario
+        }
 
         // Formatear la fecha a un formato más legible (DD/MM/AAAA)
         const dateParts = date.split('-');
@@ -108,10 +181,10 @@ box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0
 
         // CREACIÓN DEL MENSAJE: USANDO %0A PARA LOS SALTOS DE LÍNEA
         let message = `*¡NUEVA SOLICITUD DE CITA!*%0A%0A`; // Encabezado con 2 saltos de línea
-        message += ` *Cliente:* ${clientName}%0A`;
-        message += ` *Servicio:* ${service}%0A`;
-        message += ` *Fecha Solicitada:* ${formattedDate}%0A`;
-        message += ` *Hora Solicitada:* ${time}%0A%0A`; // 2 saltos de línea antes del cierre
+        message += `👤 *Cliente:* ${clientName}%0A`;
+        message += `🛠️ *Servicio:* ${service}%0A`;
+        message += `📅 *Fecha Solicitada:* ${formattedDate}%0A`;
+        message += `⏰ *Hora Solicitada:* ${time}%0A%0A`; // 2 saltos de línea antes del cierre
         message += `*¡Por favor, confírmame esta cita!*`;
 
         // Codificar el mensaje para la URL
