@@ -104,11 +104,11 @@
             const formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
 
             // Crear el mensaje de solicitud
-            let message = `*¡NUEVA SOLICITUD DE CITA!*`;
-            message += `Cliente: ${clientName}`;
-            message += `Servicio: ${service}`;
-            message += `Fecha Solicitada: ${formattedDate}`;
-            message += `Hora Solicitada: ${time}`;
+            let message = `*¡NUEVA SOLICITUD DE CITA!*\n\n`;
+            message += `Cliente: ${clientName}\n`;
+            message += `Servicio: ${service}\n`;
+            message += `Fecha Solicitada: ${formattedDate}\n`;
+            message += `Hora Solicitada: ${time}\n\n`;
             message += `¡Por favor, confírmame esta cita!`;
 
             // Codificar el mensaje para la URL
