@@ -179,11 +179,11 @@
             const formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
 
             // CREACIÓN DEL MENSAJE: AJUSTADO EL ESPACIADO CON %0A%0A PARA UNA LÍNEA VACÍA ENTRE CADA DATO
-            let message = `*¡NUEVA SOLICITUD DE CITA!*%0A%0A`; // Encabezado + 1 línea vacía
-            message += `👤 *Cliente:* ${clientName}%0A%0A`; // Cliente + 1 línea vacía
-            message += `🛠️ *Servicio:* ${service}%0A%0A`; // Servicio + 1 línea vacía
-            message += `📅 *Fecha Solicitada:* ${formattedDate}%0A`; // Fecha (manteniendo Hora en la línea siguiente)
-            message += `⏰ *Hora Solicitada:* ${time}%0A%0A`; // Hora + 1 línea vacía antes del mensaje final
+            let message = `*¡NUEVA SOLICITUD DE CITA!* %0A%0A`; // Encabezado + 1 línea vacía
+            message += `👤 *Cliente:* ${clientName} %0A%0A`; // Cliente + 1 línea vacía
+            message += `🛠️ *Servicio:* ${service} %0A%0A`; // Servicio + 1 línea vacía
+            message += `📅 *Fecha Solicitada:* ${formattedDate} %0A`; // Fecha (manteniendo Hora en la línea siguiente)
+            message += `⏰ *Hora Solicitada:* ${time} %0A%0A`; // Hora + 1 línea vacía antes del mensaje final
             message += `*¡Por favor, confírmame esta cita!*`;
 
             // Codificar el mensaje para la URL
@@ -210,3 +210,4 @@
     </script>
 </body>
 </html>
+
