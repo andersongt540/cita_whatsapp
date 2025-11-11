@@ -180,12 +180,12 @@
 
             // CREACIÓN DEL MENSAJE: Usando \n para saltos de línea (se codificarán correctamente)
             let message = `📅 *NUEVA SOLICITUD DE CITA*\n\n`;
-            message += `━━━━━━━━━━━━━━━━━━━━\n\n`;
+            message += `━━━━━━━━━━━━━━━━━━\n\n`;
             message += `👤 *Cliente:*\n${clientName}\n\n`;
             message += `🏥 *Servicio:*\n${service}\n\n`;
             message += `📆 *Fecha Solicitada:*\n${formattedDate}\n\n`;
             message += `🕐 *Hora Solicitada:*\n${time}\n\n`;
-            message += `━━━━━━━━━━━━━━━━━━━━\n\n`;
+            message += `━━━━━━━━━━━━━━━━━━\n\n`;
             message += `✅ *¡Por favor, confírmame esta cita!*`;
 
             // Codificar el mensaje para la URL (encodeURIComponent convertirá \n a %0A correctamente)
