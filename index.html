@@ -178,15 +178,15 @@
             const dateParts = date.split('-');
             const formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
 
-            // CREACIÓN DEL MENSAJE: ELIMINANDO LOS EMOTICONES
-            let message = `*¡NUEVA SOLICITUD DE CITA!*%0A%0A`; // Encabezado con 2 saltos de línea
-            message += `*Cliente:* ${clientName}%0A`;
-            message += `*Servicio:* ${service}%0A`;
-            message += `*Fecha Solicitada:* ${formattedDate}%0A`;
-            message += `*Hora Solicitada:* ${time}%0A%0A`; // 2 saltos de línea antes del cierre
+            // CREACIÓN DEL MENSAJE: Usando \n para saltos de línea (se codificarán correctamente)
+            let message = `*¡NUEVA SOLICITUD DE CITA!*\n\n`; // Encabezado con 2 saltos de línea
+            message += `*Cliente:* ${clientName}\n`;
+            message += `*Servicio:* ${service}\n`;
+            message += `*Fecha Solicitada:* ${formattedDate}\n`;
+            message += `*Hora Solicitada:* ${time}\n\n`; // 2 saltos de línea antes del cierre
             message += `*¡Por favor, confírmame esta cita!*`;
 
-            // Codificar el mensaje para la URL
+            // Codificar el mensaje para la URL (encodeURIComponent convertirá \n a %0A correctamente)
             const encodedMessage = encodeURIComponent(message);
 
             // Crear el enlace de WhatsApp
