@@ -1,214 +1,731 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserva tu Cita Rápida | WhatsApp</title>
-    <!-- Carga de Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva tu Cita Rápida | WhatsApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+    
+    <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7f9fb;
+            background: radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.25), transparent 45%),
+                        radial-gradient(circle at 80% 0%, rgba(249, 115, 22, 0.18), transparent 40%),
+                        #020617;
+            color: #0f172a;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            width: 420px;
+            height: 420px;
+            top: -100px;
+            border-radius: 50%;
+            filter: blur(110px);
+            opacity: 0.6;
+            z-index: 0;
+        }
+        body::before {
+            left: -120px;
+            background: rgba(14, 165, 233, 0.35);
+        }
+        body::after {
+            right: -80px;
+            background: rgba(248, 113, 113, 0.25);
         }
         .whatsapp-green {
-            background-color: #25d366;
-            transition: background-color 0.3s;
+            background: linear-gradient(120deg, #22c55e, #16a34a);
+            color: #fff !important;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
         }
         .whatsapp-green:hover {
-            background-color: #128c7e;
+            background: linear-gradient(120deg, #16a34a, #15803d);
+            transform: translateY(-1px);
+            box-shadow: 0 15px 30px -12px rgba(21, 128, 61, 0.75);
         }
-        .card-shadow {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        .whatsapp-green svg {
+            color: inherit;
         }
-    </style>
+        .card-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+        /* Ajuste para Tom Select dentro del formulario con Tailwind */
+        .ts-wrapper.single .ts-control {
+            border-radius: 0.5rem; /* rounded-lg */
+            border-color: #d1d5db; /* border-gray-300 */
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+        }
+        .ts-wrapper.single .ts-control input {
+            line-height: 1.5rem; /* Ajuste para el texto de búsqueda */
+        }
+        .ts-dropdown {
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+        }
+        .floating-shape {
+            position: absolute;
+            inset: auto auto 1rem -1.5rem;
+            width: 130px;
+            height: 130px;
+            background: linear-gradient(135deg, #22d3ee, #3b82f6);
+            opacity: 0.15;
+            border-radius: 1.5rem;
+            filter: blur(0px);
+            animation: float 6s ease-in-out infinite;
+        }
+        .floating-shape:nth-child(2) {
+            inset: -1rem -1rem auto auto;
+            background: linear-gradient(135deg, #f97316, #f43f5e);
+            width: 90px;
+            height: 90px;
+            opacity: 0.2;
+            animation-delay: 1.5s;
+        }
+        @keyframes float {
+            0% { transform: translate3d(0, 0, 0); }
+            50% { transform: translate3d(10px, -10px, 0); }
+            100% { transform: translate3d(0, 0, 0); }
+        }
+    </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="text-gray-100 min-h-screen py-12 px-4 relative overflow-hidden">
 
-    <div id="app" class="w-full max-w-lg bg-white p-6 md:p-10 rounded-xl card-shadow border border-gray-100">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.15),_transparent_55%)] pointer-events-none"></div>
 
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Agendar Cita Rápida</h1>
-            <p class="text-gray-500 mt-2">Completa el formulario y recibiré la solicitud directamente por WhatsApp.</p>
-        </div>
-
-        <!-- Formulario -->
-        <form id="appointment-form" class="space-y-6">
-            
-            <!-- Nombre del Cliente -->
-            <div>
-                <label for="client-name" class="block text-sm font-medium text-gray-700 mb-1">Tu Nombre Completo</label>
-                <input type="text" id="client-name" name="client-name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150" placeholder="Ej: Juan Pérez">
-            </div>
-
-            <!-- Servicio Requerido (Actualizado con tu opción) -->
-            <div>
-                <label for="service" class="block text-sm font-medium text-gray-700 mb-1">Servicio que deseas</label>
-                <select id="service" name="service" required class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 transition duration-150">
-                    <option value="">-- Selecciona un servicio --</option>
-                    <option value="Cirugia general">Cirugia general</option>
-                    <option value="Consulta General">Consulta General</option>
-                    <option value="Revisión">Revisión</option>
-                    <option value="Otro Servicio">Otro (Especificar)</option>
-                </select>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Fecha -->
-                <div>
-                    <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Fecha Preferida</label>
-                    <input type="date" id="date" name="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+    <main class="relative z-10 w-full max-w-6xl mx-auto">
+        <div class="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] items-center">
+            <section class="space-y-8">
+                <div class="inline-flex items-center text-sm font-semibold tracking-wide uppercase text-sky-200 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 shadow-lg shadow-sky-500/10 backdrop-blur">
+                    <span class="h-2 w-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></span>
+                    Atención médica sin esperas
                 </div>
-                
-                <!-- Hora -->
-                <div>
-                    <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Hora Preferida</label>
-                    <input type="time" id="time" name="time" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+
+                <div class="space-y-5">
+                    <h1 class="text-4xl sm:text-5xl font-bold leading-tight text-white">
+                        Agenda tu cita con especialistas
+                        <span class="text-sky-300 block">y recibe confirmación por WhatsApp</span>
+                    </h1>
+                    <p class="text-base sm:text-lg text-gray-300 max-w-2xl">
+                        Elige la especialidad, encuentra al doctor indicado y envía tu solicitud personalizada en menos de un minuto. Todo en un formulario claro y optimizado para cualquier dispositivo.
+                    </p>
                 </div>
-            </div>
 
-            <!-- Botón de Envío -->
-            <button type="submit" class="w-full flex items-center justify-center whatsapp-green text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-green-300 transition duration-200 ease-in-out">
-                <!-- Icono de WhatsApp (Inline SVG) -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
-                    <path d="M12.035 2.177a9.887 9.887 0 0 0-8.948 5.437A9.887 9.887 0 0 0 2.177 12c0 1.748.435 3.496 1.298 4.966L2 22l5.244-1.378a9.887 9.887 0 0 0 4.79-1.28A9.887 9.887 0 0 0 21.823 12a9.887 9.887 0 0 0-9.788-9.823zM12 20.158a8.158 8.158 0 0 1-4.882-1.574L6.963 18l-3.376.885.892-3.238L4.35 15.65c-.754-1.293-1.157-2.784-1.157-4.305A8.158 8.158 0 0 1 12 3.842a8.158 8.158 0 0 1 7.749 5.836A8.158 8.158 0 0 1 12 20.158zM17.16 13.993c-.092-.05-.56-.273-.65-.304-.09-.03-.158-.046-.226.046-.07.092-.258.304-.316.366-.058.06-.12.064-.222.032-.1-.03-.432-.158-.823-.508-.304-.265-.51-.592-.578-.7-.068-.11-.008-.17-.008-.23.003-.06.007-.11.008-.158.002-.045 0-.09-.046-.14-.047-.05-.27-.123-.374-.15-.104-.027-.188-.035-.226-.035-.038 0-.097.006-.15.06-.053.05-.205.24-.205.584 0 .344.21.673.24.72.03.047.412.63.996.88.583.25 1.05.207 1.402.19.35-.015.56-.16.65-.31.09-.15.258-.887.258-.946-.002-.06-.092-.092-.184-.14z"/>
-                </svg>
-                ENVIAR SOLICITUD DE CITA POR WHATSAPP
-            </button>
-        </form>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <article class="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+                        <p class="text-sm text-sky-200 uppercase tracking-wide">Profesionales activos</p>
+                        <p class="text-3xl font-bold text-white mt-1">120+</p>
+                        <p class="text-sm text-gray-400 mt-1">Disponibles por especialidad</p>
+                    </article>
+                    <article class="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+                        <p class="text-sm text-emerald-200 uppercase tracking-wide">Respuesta promedio</p>
+                        <p class="text-3xl font-bold text-white mt-1">&lt; 10 min</p>
+                        <p class="text-sm text-gray-400 mt-1">Confirmación por WhatsApp</p>
+                    </article>
+                </div>
 
-        <!-- Mensaje de Confirmación (Oculto inicialmente) -->
-        <div id="success-message" class="hidden mt-6 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg relative" role="alert">
-            <strong class="font-bold">¡Cita casi lista!</strong>
-            <span class="block sm:inline"> Se ha abierto tu WhatsApp con el mensaje pre-llenado. Solo haz click en "Enviar" para que me llegue la solicitud.</span>
-        </div>
-        
-    </div>
-
-    <script>
-        // Función para obtener la hora actual en formato HH:MM (añade 1 minuto de margen)
-        function getCurrentTime() {
-            const now = new Date();
-            // Añadir 1 minuto para asegurar que la hora actual no sea seleccionable
-            const minutes = now.getMinutes() + 1;
-            now.setMinutes(minutes);
-            
-            const hours = String(now.getHours()).padStart(2, '0');
-            const newMinutes = String(now.getMinutes()).padStart(2, '0');
-            return `${hours}:${newMinutes}`;
-        }
-
-        // Función para obtener la fecha actual en formato YYYY-MM-DD
-        function getCurrentDate() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-
-        // Configura las restricciones de fecha y hora
-        function setupDateTimeRestrictions() {
-            const dateInput = document.getElementById('date');
-            const timeInput = document.getElementById('time');
-            const todayDate = getCurrentDate();
-            
-            // 1. Establece la fecha mínima para el campo de fecha (no permite fechas anteriores a hoy)
-            dateInput.min = todayDate;
-
-            // 2. Función para aplicar la restricción de hora
-            const applyTimeRestriction = () => {
-                // Si la fecha seleccionada es HOY
-                if (dateInput.value === todayDate) {
-                    timeInput.min = getCurrentTime();
-                } else {
-                    // Si la fecha es futura o no hay fecha seleccionada, elimina la restricción de hora mínima
-                    timeInput.removeAttribute('min');
-                }
-                
-                // Si el valor actual de la hora es menor que el mínimo, lo resetea para evitar errores de validación
-                if (timeInput.value && timeInput.min && timeInput.value < timeInput.min) {
-                     timeInput.value = '';
-                }
-            };
-            
-            // Ejecuta la función al inicio y cada vez que la fecha cambie
-            applyTimeRestriction();
-            dateInput.addEventListener('change', applyTimeRestriction);
-        }
-
-        // Espera a que el DOM esté completamente cargado antes de ejecutar el setup
-        document.addEventListener('DOMContentLoaded', setupDateTimeRestrictions);
-
-        document.getElementById('appointment-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Evita el envío tradicional del formulario
-
-            // --- Configuración de tu número de WhatsApp ---
-            // NÚMERO USADO: 584241699219
-            const YOUR_WHATSAPP_NUMBER = '584241699219'; 
-            // ---------------------------------------------
-            
-            const clientName = document.getElementById('client-name').value.trim();
-            const service = document.getElementById('service').value;
-            const date = document.getElementById('date').value;
-            const time = document.getElementById('time').value;
-            
-            // Validar que la fecha y hora seleccionada no sea pasada (doble chequeo)
-            const selectedDateTime = new Date(`${date}T${time}:00`);
-            const now = new Date();
-
-            if (selectedDateTime < now) {
-                 // Usamos un modal o mensaje en lugar de alert()
-                 const validationMessage = document.createElement('div');
-                 validationMessage.className = 'fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50';
-                 validationMessage.innerHTML = `
-                     <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm text-center">
-                        <h3 class="text-xl font-bold mb-3 text-red-600">⚠️ Error de Cita</h3>
-                        <p class="mb-4 text-gray-700">No puedes seleccionar una fecha u hora que ya ha pasado. Por favor, elige una hora y fecha a partir de ahora.</p>
-                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-150" onclick="this.parentElement.parentElement.remove()">Entendido</button>
+                <div class="space-y-4">
+                    <h2 class="text-sm font-semibold tracking-wide text-gray-300 uppercase">Cómo funciona</h2>
+                    <div class="flex flex-wrap gap-3">
+                        <div class="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl px-4 py-3 backdrop-blur">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-200 font-semibold">1</span>
+                            <div>
+                                <p class="text-white font-semibold">Elige tu especialidad</p>
+                                <p class="text-gray-400 text-sm">Búsqueda asistida en segundos</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl px-4 py-3 backdrop-blur">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-200 font-semibold">2</span>
+                            <div>
+                                <p class="text-white font-semibold">Completa tus datos</p>
+                                <p class="text-gray-400 text-sm">Fecha y hora preferidas</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl px-4 py-3 backdrop-blur">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-200 font-semibold">3</span>
+                            <div>
+                                <p class="text-white font-semibold">Enviado al especialista</p>
+                                <p class="text-gray-400 text-sm">Mensaje directo por WhatsApp</p>
+                            </div>
+                        </div>
                     </div>
-                 `;
-                 document.body.appendChild(validationMessage);
-                 return; // Detener el envío del formulario
-            }
+                </div>
+            </section>
 
-            // Formatear la fecha a un formato más legible (DD/MM/AAAA)
-            const dateParts = date.split('-');
-            const formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+            <div id="app" class="relative">
+                <span class="floating-shape"></span>
+                <span class="floating-shape"></span>
+                <div class="w-full bg-white text-gray-900 p-6 md:p-8 rounded-3xl card-shadow border border-white/40 backdrop-blur">
 
-            // CREACIÓN DEL MENSAJE: Usando \n para saltos de línea (se codificarán correctamente)
-            let message = `📅 *NUEVA SOLICITUD DE CITA*\n\n`;
-            message += `━━━━━━━━━━━━━━━━━━\n\n`;
-            message += `👤 *Cliente:*\n${clientName}\n\n`;
-            message += `🏥 *Servicio:*\n${service}\n\n`;
-            message += `📆 *Fecha Solicitada:*\n${formattedDate}\n\n`;
-            message += `🕐 *Hora Solicitada:*\n${time}\n\n`;
-            message += `━━━━━━━━━━━━━━━━━━\n\n`;
-            message += `✅ *¡Por favor, confírmame esta cita!*`;
+                    <div class="mb-8 text-center">
+                        <p class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide uppercase text-emerald-600 bg-emerald-50 px-4 py-1 rounded-full mb-4">
+                            <span class="h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
+                            Confirmación inmediata
+                        </p>
+                        <h2 class="text-3xl font-bold text-gray-900">Agendar Cita Rápida</h2>
+                        <p class="text-gray-500 mt-2 text-sm sm:text-base">Selecciona la especialidad y el doctor para enviar tu solicitud personalizada por WhatsApp.</p>
+                    </div>
 
-            // Codificar el mensaje para la URL (encodeURIComponent convertirá \n a %0A correctamente)
-            const encodedMessage = encodeURIComponent(message);
+                    <form id="appointment-form" class="space-y-6">
+                        
+                        <div>
+                            <label for="client-name" class="block text-sm font-medium text-gray-700 mb-1">Tu Nombre Completo</label>
+                            <input type="text" id="client-name" name="client-name" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition duration-150" placeholder="Ej: Juan Pérez">
+                        </div>
 
-            // Crear el enlace de WhatsApp
-            const whatsappUrl = `https://wa.me/${YOUR_WHATSAPP_NUMBER}?text=${encodedMessage}`;
+                        <div>
+                            <label for="specialty" class="block text-sm font-medium text-gray-700 mb-1">Especialidad</label>
+                            <select id="specialty" name="specialty" required class="w-full" placeholder="Escribe para buscar la especialidad...">
+                                <option value="">-- Selecciona una especialidad --</option>
+                            </select>
+                        </div>
 
-            // Abrir el enlace en una nueva pestaña
-            window.open(whatsappUrl, '_blank');
+                        <div>
+                            <label for="doctor" class="block text-sm font-medium text-gray-700 mb-1">Doctor/a</label>
+                            <select id="doctor" name="doctor" required class="w-full" disabled placeholder="Selecciona una especialidad primero...">
+                                <option value="">-- Selecciona un doctor/a --</option>
+                            </select>
+                        </div>
 
-            // Mostrar mensaje de éxito/instrucción
-            const successMessage = document.getElementById('success-message');
-            successMessage.classList.remove('hidden');
-            
-            // Opcional: limpiar el formulario después del envío
-            document.getElementById('appointment-form').reset();
-            
-            // Opcional: ocultar el mensaje de éxito después de 5 segundos
-            setTimeout(() => {
-                successMessage.classList.add('hidden');
-            }, 5000);
-        });
-    </script>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Fecha Preferida</label>
+                                <input type="date" id="date" name="date" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition duration-150">
+                            </div>
+                            
+                            <div>
+                                <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Hora Preferida</label>
+                                <input type="time" id="time" name="time" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition duration-150">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full flex items-center justify-center whatsapp-green text-white font-semibold py-3 rounded-2xl shadow-lg shadow-emerald-500/30 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-300 transition duration-200 ease-in-out text-sm sm:text-base">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
+                                <path d="M12.035 2.177a9.887 9.887 0 0 0-8.948 5.437A9.887 9.887 0 0 0 2.177 12c0 1.748.435 3.496 1.298 4.966L2 22l5.244-1.378a9.887 9.887 0 0 0 4.79-1.28A9.887 9.887 0 0 0 21.823 12a9.887 9.887 0 0 0-9.788-9.823zM12 20.158a8.158 8.158 0 0 1-4.882-1.574L6.963 18l-3.376.885.892-3.238L4.35 15.65c-.754-1.293-1.157-2.784-1.157-4.305A8.158 8.158 0 0 1 12 3.842a8.158 8.158 0 0 1 7.749 5.836A8.158 8.158 0 0 1 12 20.158zM17.16 13.993c-.092-.05-.56-.273-.65-.304-.09-.03-.158-.046-.226.046-.07.092-.258.304-.316.366-.058.06-.12.064-.222.032-.1-.03-.432-.158-.823-.508-.304-.265-.51-.592-.578-.7-.068-.11-.008-.17-.008-.23.003-.06.007-.11.008-.158.002-.045 0-.09-.046-.14-.047-.05-.27-.123-.374-.15-.104-.027-.188-.035-.226-.035-.038 0-.097.006-.15.06-.053.05-.205.24-.205.584 0 .344.21.673.24.72.03.047.412.63.996.88.583.25 1.05.207 1.402.19.35-.015.56-.16.65-.31.09-.15.258-.887.258-.946-.002-.06-.092-.092-.184-.14z"/>
+                            </svg>
+                            ENVIAR SOLICITUD DE CITA POR WHATSAPP
+                        </button>
+                    </form>
+
+                    <div id="success-message" class="hidden mt-6 bg-sky-50 border border-sky-100 text-sky-800 px-4 py-4 rounded-2xl relative" role="alert">
+                        <strong class="font-bold">¡Cita casi lista!</strong>
+                        <span class="block sm:inline"> Se ha abierto tu WhatsApp con el mensaje pre-llenado. Solo haz click en "Enviar" para que me llegue la solicitud.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==========================================================
+        // 🚨 ZONA DE CONFIGURACIÓN DE DOCTORES POR ESPECIALIDAD
+        // ==========================================================
+        const doctorsBySpecialty = {
+            "ALERGOLOGIA E INMUNOLOGIA": [
+                { name: "DR. GUILLERMO BOGGIANO", number: "584142450930" }
+            ],
+            "ANATOMIA PATOLOGICA": [
+                { name: "DR. ARMANDO RODRIGUEZ", number: "584166309016" },
+                { name: "DRA. YANEIA DE SULBARAN", number: "584143281451" },
+                { name: "DR. JOSE SULBARAN", number: "584143096260" },
+                { name: "DR. JESUS ADAN ROMERO", number: "584149200092" }
+            ],
+            "ANESTESIOLOGIA": [
+                { name: "DRA. FRNCA FRANCHI", number: "584142650007" },
+                { name: "DRA. YAMELLY DE PAPALE", number: "584166254333" },
+                { name: "DR. EDGARDO GOSEN", number: "584147922508" },
+                { name: "DR. SERGIO HERNANDEZ", number: "58424133710" },
+                { name: "DR. ABDALLA HONSANI", number: "584143239718" },
+                { name: "DR. PANFILIO PAPALE", number: "584166254333" },
+                { name: "DR. TEODORO PEREZ", number: "584149292096" },
+                { name: "DR. GUSTAVO RAMIREZ", number: "584142371020" },
+                { name: "DR. MILTON RODRIGUEZ", number: "584142743071" },
+                { name: "DRA. INGRID SALGREDO", number: "584149198549" },
+                { name: "DR. PEDRO VICENTELLI", number: "584143284478" },
+                { name: "DR. ERNESTO GUEVARA", number: "584122651565" },
+                { name: "DRA. FARAH RIOS", number: "584122651565" },
+                { name: "DRA. CARLA BORTOT", number: "584244009559" },
+                { name: "DRA. YENNI SALINAS", number: "584265116953" },
+                { name: "DRA. LISETH PEROZO CEDEÑO", number: "584148342899" },
+                { name: "DRA. BETZABETH HERNANDEZ", number: "584242508533" },
+                { name: "DRA. RAQUEL MARTINEZ", number: "584249383493" },
+                { name: "SRA. MARIA JOSEFINA (SECRETARIA DE ANESTESIOLOGIA)", number: "584242419600" }
+            ],
+            "CARDIOLOGIA": [
+                { name: "DRA. ZUNILDE PAREDES", number: "584143210260" },
+                { name: "DRA. MARIA PELLINO", number: "584143379027" },
+                { name: "DR. MANUEL CARUJO", number: "584143206992" },
+                { name: "DR. NELSON CARRILLO", number: "584143385526" },
+                { name: "DR. JOSE ANGEL BRITO", number: "584163835071" },
+                { name: "DR. JOSE GREGORIO MONTERO", number: "584241251347" },
+                { name: "DR. DIEGO TERRAZA", number: "584241333712" },
+                { name: "DR. JUAN PEDRO GOMEZ", number: "584124420216" },
+                { name: "DRA. MARIA VILLEGAS", number: "584144254950" },
+                { name: "DR. EDGARDO GUATACHA", number: "584148316248" },
+                { name: "DR. HEMERSON FUENTES", number: "584148009049" },
+                { name: "DRA. VICTORIA URUETA", number: "5841292703" }
+            ],
+            "CARDIOLOGIA INFANTIL": [
+                { name: "DR. JUAN PETIT", number: "584164113155" }
+            ],
+            "CIRUGIA DE LA MANO": [
+                { name: "DR. LYNDON FRANCO", number: "584166370105" },
+                { name: "DRA. ANA BELEN NAVAS A.", number: "584120362935" }
+            ],
+            "CIRUGIA DE TORAX": [
+                { name: "DRA. MARYULIS DIAZ", number: "584126482305" }
+            ],
+            "CIRUGIA CARDIOVASCULAR": [
+                { name: "DR. BASIL KALBAKDIJ", number: "584143285465" },
+                { name: "DR. PABLO MIELNIK", number: "584142070148" },
+                { name: "DR. JORGE SANJINES", number: "584146273517" },
+                { name: "DRA. LISKARYS PEÑALOZA", number: "584143195582" },
+                { name: "DRA. GLORIA URQUIOLA", number: "584122358251" },
+                { name: "DRA. MARTIZA NOGUERA", number: "584143260530" }
+            ],
+            "CIRUGIA GENERAL": [
+                { name: "DR. DAVID ARANA", number: "584149307399" },
+                { name: "DR. FELIX ANZOLA", number: "58416271819" },
+                { name: "DR. JUAN ISAAC", number: "584166225393" },
+                { name: "DR. VICTOR MARTELO", number: "584143259937" },
+                { name: "DRA. DELI GOMEZ APONTE", number: "584243060099" },
+                { name: "DRA. DIANA LUCIA FRANCO", number: "584166070081" },
+                { name: "DR. EDUARDO ALLIEGRO MENDEZ", number: "584242570177" },
+                { name: "DRA. MARIA PIERINI", number: "584142453365" },
+                { name: "DRA. IVONNE BAYEH", number: "584165394029" },
+                { name: "DR. JOSE CARLOS GONCALVES", number: "584143214193" },
+                { name: "DRA. PATRICIA ZAMBRANO", number: "584169954462" }
+            ],
+            "CIRUGIA BUCO-MAXILOFACIAL": [
+                { name: "DRA. YUBISAY AVARIANO", number: "584123871068" }
+            ],
+            "CIRUGIA ONCOLOGICA": [
+                { name: "DR. RAFAEL CONTASTI", number: "584143214163" }
+            ],
+            "CIRUGIA PEDIATRICA": [
+                { name: "DRA. NATHACHA COELLO RONDON", number: "584148294045" },
+                { name: "DRA. ISAUBETT YAJURE", number: "584145196820" },
+                { name: "DR. JUAN GRATEROL", number: "584243620376" },
+                { name: "DRA. DAYANA MACHADO", number: "584141072789" },
+                { name: "DRA. GLENDA CORTEZ", number: "584143285166" }
+            ],
+            "CIRUGIA PLASTICA": [
+                { name: "DRA. ZHULAY TORRES", number: "584166275544" },
+                { name: "DRA. RUTH DE MANGUPLI", number: "584141330420" },
+                { name: "DRA. LILIANA TORRES", number: "584142274777" },
+                { name: "DRA. ELVIA A. CUAURO", number: "584142149513" },
+                { name: "DR. ESTATIO GUTIERREZ", number: "584143215371" },
+                { name: "DR. GUSTAVO LEDEZMA", number: "584141020380" },
+                { name: "DRA. MABEL PARRAGA", number: "584142450941" }
+            ],
+            "DERMATOLOGIA": [
+                { name: "DRA. MARIA RONDON", number: "584142132727" },
+                { name: "DRA. BABARA CARRERA", number: "584148303044" }
+            ],
+            "ENDOCRINOLOGIA": [
+                { name: "DRA. KIRA LEON", number: "584261372983" },
+                { name: "DR. GABRIEL ECHEVERRIA", number: "584141856726" },
+                { name: "DR. ANDRES G. ORTIZ M.", number: "584165262722" }
+            ],
+            "ENDOCRINOLOGIA INFANTIL": [
+                { name: "DR. VICTOR BRACHO", number: "584143052701" }
+            ],
+            "GASTROENTEROLOGIA": [
+                { name: "DR. RONALDO SOLANO S.", number: "584246543735" },
+                { name: "DRA. NELLY ALVAREZ DE ESLAVA", number: "584166398093" },
+                { name: "DR. FREDDY DAVILA", number: "584143088545" },
+                { name: "DRA. MIREYA GONZALEZ", number: "584126237291" },
+                { name: "DR. JOSIMAR MANZANO", number: "584143068755" },
+                { name: "DRA. BATHILDA MARTINEZ", number: "584146219427" },
+                { name: "DRA. CARMEN PEREZ", number: "584166269536" },
+                { name: "DRA. SILVIA SANCHEZ", number: "584142554806" },
+                { name: "DRA. BEATRIZ SENIOR", number: "584143262101" },
+                { name: "DR. MIGUEL HOMSI", number: "584142579908" },
+                { name: "DRA. MARIA J. HAENDEL", number: "584242365177" },
+                { name: "DRA. MARIYZA MARTINEZ", number: "584123240139" }
+            ],
+            "GINECOLOGIA": [
+                { name: "DRA. RHAYZA MARTINEZ", number: "584144648924" }
+            ],
+            "GINECO-OBSTETRA": [
+                { name: "DRA. DORA SILVA", number: "584142321388" },
+                { name: "DR. JOSE MANZANO", number: "584166248388" },
+                { name: "DR. JOSE MANZANO (Consulta Adicional)", number: "582124421491" },
+                { name: "DRA. MARIA LISSETTE THEN M.", number: "584141347680" },
+                { name: "DRA. GABRIELA AL HADDAD", number: "584128957572" },
+                { name: "DR. JOSE GALLANO", number: "584142790043" },
+                { name: "DR. NESTOR FERRER", number: "584142613270" },
+                { name: "DRA. HERCILIA VALECILLOS", number: "584166233528" },
+                { name: "DRA. MARISELA SILVA", number: "584123277723" },
+                { name: "DRA. SAMANTHA SMITH", number: "584269187883" },
+                { name: "DR. FREDDY SALAZAR", number: "584126045675" },
+                { name: "DRA. MILADYS M. CERRO M.", number: "584249738895" },
+                { name: "DR. GUSTAVO BORGES", number: "582123680917" },
+                { name: "DR. ALEJANDRO FEO", number: "582129871070" },
+                { name: "DR. ALEJANDRO FEO (Consulta Adicional)", number: "584141210855" },
+                { name: "DRA. ROSALINDA GIL", number: "584141297921" },
+                { name: "DRA. YADIRA BREA", number: "584166231028" },
+                { name: "DR. JOSE RAGAZZI", number: "584166246214" }
+            ],
+            "HEMATOLOGIA": [
+                { name: "DR. CARLOS FEFER", number: "584143033265" }
+            ],
+            "INFECTOLOGIA": [
+                { name: "DR. ALEXIS MALDONADO", number: "584143256683" },
+                { name: "DR. ROBERTO SMITH", number: "582124519458" },
+                { name: "DR. DARIO POSADA", number: "584144371234" },
+                { name: "DRA. MIRIAM GONZALEZ", number: "584141382694" }
+            ],
+            "MEDICINA CRITICA": [
+                { name: "DR. REINALDO RIVERA", number: "584122513675" },
+                { name: "DRA. RAQUEL WAHAB", number: "584141780062" },
+                { name: "DRA. WILMARY QUIJADA", number: "584164232104" },
+                { name: "DRA. REBECA VILORIA", number: "584241097241" },
+                { name: "DR. RAFMIN MENDEZ", number: "584148531320" }
+            ],
+            "MEDICINA CRITICA PEDIÁTRICA": [
+                { name: "DRA. MARIA GABRIELA MANGANELLI", number: "584166300621" }
+            ],
+            "MEDICINA INTERNA": [
+                { name: "DRA. EXCELDA MOLERO RANGEL", number: "584265600187" },
+                { name: "DRA. FABIOLA LARES", number: "584262394416" },
+                { name: "DRA. YARITZA TORRES", number: "584161329262" },
+                { name: "DRA. CINTHYA NAVARRO", number: "584241903963" },
+                { name: "DRA. YANET OGEERALLY", number: "584143272593" },
+                { name: "DRA. FLORISABEL ZAMBRANO", number: "584141125884" },
+                { name: "DR. ELEAZAR JOSE ACOSTA A.", number: "584243127237" },
+                { name: "DRA. MERCEDES ASCANIO", number: "584142702084" },
+                { name: "DR. LEOPOLDO GOMEZ", number: "584143280228" },
+                { name: "DRA. MARISELA ALDANA", number: "584142719418" },
+                { name: "DRA. PERLA DELGADO", number: "584143001909" }
+            ],
+            "MASTOLOGÍA - RADIÓLOGOS": [
+                { name: "DRA. MARTHA POSADA", number: "584143001906" },
+                { name: "DR. FEDOR VILACHA", number: "582124817964" },
+                { name: "DR. JOSE TEJADA", number: "584124639853" },
+                { name: "DRA. ILSE DELGADO", number: "584166304863" }
+            ],
+            "NEFROLOGIA": [
+                { name: "DR. MARLON DIAZ", number: "584166241805" },
+                { name: "DR. PABLO J. GONZALEZ", number: "584122656754" },
+                { name: "DR. CARLOS MARQUEZ", number: "584261171133" }
+            ],
+            "NEONATOLOGIA": [
+                { name: "DRA. ANA MOTABAN", number: "584163306418" },
+                { name: "DRA. MARCIANNY SOYNEL", number: "584122433696" },
+                { name: "DR. JOSE LANDAETA", number: "584142027060" }
+            ],
+            "NEUMONOLOGIA": [
+                { name: "DR. FRANQUIS HERRERA", number: "584263054685" },
+                { name: "DR. CIRO GAONA", number: "582122373276" },
+                { name: "DR. SEVERIN KONE", number: "582124061298" },
+                { name: "DR. GERARDO GUZMAN", number: "584123187804" }
+            ],
+            "NEUROCIRUGIA": [
+                { name: "DRA. MARIA G. NOGUERA", number: "584143257144" },
+                { name: "DR. SALVATORE VALISENA", number: "584166275135" },
+                { name: "DRA. MARTINA BREA", number: "584248390332" },
+                { name: "DRA. BEATRIZ MARCANO", number: "584166028188" },
+                { name: "DR. FRANCISCO CARRASQUERO", number: "584147590011" },
+                { name: "DRA. ANDREA K. LEAL S.", number: "584246288176" },
+                { name: "DR. MISAEL MERIDA", number: "584126274984" },
+                { name: "DRA. MERCEDES COLMENARES", number: "584166255157" }
+            ],
+            "NEUROLOGIA": [
+                { name: "DRA. ADRIANA DURAN", number: "584141253929" },
+                { name: "DRA. ROSSANA ROSAS", number: "584129346692" }
+            ],
+            "OFTALMOLOGIA": [
+                { name: "DR. MANUEL SERRANO", number: "584124830204" },
+                { name: "DR. CARLOS EDUARDO SUCRE M.", number: "582122861950" },
+                { name: "DRA. YEMI LISBETH BELLO PAZ", number: "584143079303" },
+                { name: "DRA. BARBARA ANDREINA MARTINEZ A.", number: "584142746079" },
+                { name: "DR. HECTOR ALIRIO SALAZAR", number: "584120146031" },
+                { name: "DRA. SABRA SABRINA BERBESI MORILLO", number: "584143827435" },
+                { name: "DRA. ZHARIS ZULEIDA VIVAS DE F.", number: "584143345891" }
+            ],
+            "ODONTOLOGIA": [
+                { name: "DR. MARIANO MORALES", number: "584143252806" },
+                { name: "DR. RICARDO ESCALANTE", number: "584142702084" }
+            ],
+            "ONCOLOGIA": [
+                { name: "DRA. MERCEDES POLANCO DE A.", number: "584142596353" },
+                { name: "DRA. LIGIA ENMANUELA", number: "584166246730" },
+                { name: "DRA. GISELA DIAZ", number: "584142773786" },
+                { name: "DRA. ISABEL GARCIA DE E.", number: "584143214208" },
+                { name: "DR. PALMENIDES GOMEZ", number: "584143214208" },
+                { name: "DR. ESTATIO GUTIERREZ", number: "584143215371" },
+                { name: "DRA. YOSMARCA MARTINEZ", number: "584166188010" }
+            ],
+            "ONCOLOGÍA PEDIÁTRICA": [
+                { name: "DR. JOSE RAGAZZI", number: "584140214053" },
+                { name: "DRA. ELENA V. DE PEREZ", number: "584143237741" },
+                { name: "DRA. ARLENA DE PEREZ", number: "584142634793" }
+            ],
+            "OTORRINOLARINGOLOGIA": [
+                { name: "DRA. EMILIA JOSEFINA MORA G.", number: "584142647139" },
+                { name: "DR. WILMER DURAN", number: "584122293927" }
+            ],
+            "PEDIATRIA": [
+                { name: "DR. GUILLERMO DOMINGUEZ", number: "584166092143" },
+                { name: "DRA. ANNA ROCCO", number: "584166130209" },
+                { name: "DRA. SAMANTHA SMITH DIAZ", number: "584269187883" },
+                { name: "DR. ORLANDY JORDAS", number: "584165610744" },
+                { name: "DRA. LOURDES MORILLO", number: "584167188076" },
+                { name: "DRA. GENESIS REYES", number: "584127208954" },
+                { name: "DRA. ROMMY BOGGIANO", number: "584164087455" },
+                { name: "DRA. JENNY CAROLINA GARCIA", number: "584247507062" },
+                { name: "DR. ISIDRO CONTRERAS", number: "584166056397" },
+                { name: "DR. ROBERTO MANGUPLI", number: "584143214032" },
+                { name: "DR. JOSE GERMAN MEDINA", number: "584143247621" },
+                { name: "DR. JOSE SANCHEZ", number: "584141259273" },
+                { name: "DR. JOSE MARIA URBINA", number: "584143335746" },
+                { name: "DR. JOSE MARIA URBINA (Consulta Adicional 1)", number: "584143154913" },
+                { name: "DR. JOSE MARIA URBINA (Consulta Adicional 2)", number: "582123920887" },
+                { name: "DR. ALBERTO URQUIOLA", number: "584166215768" },
+                { name: "DR. ALFREDO ZAJIA", number: "584143201885" },
+                { name: "DR. NINO TARICANI", number: "584143217178" },
+                { name: "DR. ALBERTO RAMIA", number: "584141321481" }
+            ],
+            "PROCTOLOGIA": [
+                { name: "DRA ZUNETH GONZALEZ", number: "584122166077" }
+            ],
+            "TRAUMATOLOGIA": [
+                { name: "DR. ALEXIS RODRIGUEZ", number: "584166143225" },
+                { name: "DRA. ADRIANA CEDEÑO", number: "584142611613" },
+                { name: "DR. RONDON FRANCISCO", number: "584268126800" },
+                { name: "DR. EFRAIN RODRIGO", number: "584247084491" },
+                { name: "DR. JORGE OSTOS", number: "584126265900" },
+                { name: "DR. JOSE A. GARCÍA G.", number: "584141297378" },
+                { name: "DR. ALBERTO JOSÉ MARTINEZ", number: "584143322181" },
+                { name: "DR. CRUZ MARCHAN", number: "584166154911" },
+                { name: "DR. FRANCISCO GABRIEL LUCENA", number: "584141966257" },
+                { name: "DRA. CARMEN MARTINEZ", number: "584166245767" },
+                { name: "DR. HUGO REYES", number: "584147976555" },
+                { name: "DR. TULIO REYES", number: "584166186300" },
+                { name: "DR. JOSE LUIS DIAZ", number: "58412693872" },
+                { name: "DAVID ARANA GARCIA", number: "584164266215" },
+                { name: "DR. DIEGO REYES", number: "584248005103" }
+            ],
+            "UROLOGIA": [
+                { name: "DRA. CARMEN MARTINEZ", number: "584166245767" },
+                { name: "DR. HUGO REYES", number: "584147976555" },
+                { name: "DR. TULIO REYES", number: "584166186300" },
+                { name: "DR. JOSE LUIS DIAZ", number: "58412693872" },
+                { name: "DAVID ARANA GARCIA", number: "584164266215" },
+                { name: "DR. DIEGO REYES", number: "584248005103" }
+            ],
+            "UROLOGIA PEDIÁTRICA": [
+                { name: "DRA. CARMEN MARTINEZ", number: "584166245767" }
+            ]
+        };
+        // ==========================================================
+        // FIN DE ZONA DE CONFIGURACIÓN
+        // ==========================================================
+
+        let specialtyTomSelect;
+        let doctorTomSelect;
+
+        // Función para obtener la hora actual en formato HH:MM (añade 1 minuto de margen)
+        function getCurrentTime() {
+            const now = new Date();
+            const minutes = now.getMinutes() + 1;
+            now.setMinutes(minutes);
+            
+            const hours = String(now.getHours()).padStart(2, '0');
+            const newMinutes = String(now.getMinutes()).padStart(2, '0');
+            return `${hours}:${newMinutes}`;
+        }
+
+        // Función para obtener la fecha actual en formato YYYY-MM-DD
+        function getCurrentDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Configura las restricciones de fecha y hora
+        function setupDateTimeRestrictions() {
+            const dateInput = document.getElementById('date');
+            const timeInput = document.getElementById('time');
+            const todayDate = getCurrentDate();
+            
+            // 1. Establece la fecha mínima para el campo de fecha
+            dateInput.min = todayDate;
+
+            // 2. Función para aplicar la restricción de hora
+            const applyTimeRestriction = () => {
+                if (dateInput.value === todayDate) {
+                    timeInput.min = getCurrentTime();
+                } else {
+                    timeInput.removeAttribute('min');
+                }
+                
+                if (timeInput.value && timeInput.min && timeInput.value < timeInput.min) {
+                     timeInput.value = '';
+                }
+            };
+            
+            applyTimeRestriction();
+            dateInput.addEventListener('change', applyTimeRestriction);
+        }
+
+        // Función para inicializar los Tom Selects
+        function initializeTomSelects() {
+            const specialtyElement = document.getElementById('specialty');
+            const doctorElement = document.getElementById('doctor');
+            
+            // Llenar las opciones de Especialidad
+            Object.keys(doctorsBySpecialty).sort().forEach(specialtyName => {
+                const option = document.createElement('option');
+                option.value = specialtyName;
+                option.textContent = specialtyName;
+                specialtyElement.appendChild(option);
+            });
+
+            // Inicializar Tom Select para Especialidad
+            specialtyTomSelect = new TomSelect(specialtyElement, {
+                create: false,
+                sortField: "text",
+            });
+            
+            // Inicializar Tom Select para Doctor
+            doctorTomSelect = new TomSelect(doctorElement, {
+                create: false,
+                sortField: "text",
+            });
+
+            // 💡 AGREGAR EVENT LISTENER PARA LA CASCADA
+            specialtyTomSelect.on('change', function(value) {
+                updateDoctorOptions(value);
+            });
+        }
+
+        // Función para actualizar las opciones de Doctor
+        function updateDoctorOptions(specialty) {
+            // Resetear y deshabilitar el selector de doctor
+            doctorTomSelect.clearOptions();
+            doctorTomSelect.disable();
+
+            if (specialty && doctorsBySpecialty[specialty]) {
+                const doctors = doctorsBySpecialty[specialty];
+                
+                // Añadir un placeholder inicial
+                doctorTomSelect.addOption({ value: '', text: '-- Selecciona un doctor/a --', disabled: true });
+
+                // Llenar con los doctores filtrados. Usamos name|number como value
+                doctors.forEach(doctor => {
+                    doctorTomSelect.addOption({ 
+                        value: `${doctor.name}|${doctor.number}`, 
+                        text: doctor.name 
+                    });
+                });
+
+                doctorTomSelect.enable();
+                doctorTomSelect.setValue('');
+            }
+        }
+
+
+        // Espera a que el DOM esté completamente cargado
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTomSelects();
+            setupDateTimeRestrictions();
+        });
+
+        document.getElementById('appointment-form').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            const clientName = document.getElementById('client-name').value.trim();
+            const specialty = document.getElementById('specialty').value;
+            const doctorValue = document.getElementById('doctor').value; // Formato: Name|Number
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            
+            // 1. OBTENER NOMBRE DEL DOCTOR Y NÚMERO DE WHATSAPP
+            if (!doctorValue) {
+                showModal('⚠️ Error de Cita', 'Por favor, selecciona una Especialidad y un Doctor/a.');
+                return;
+            }
+            
+            const [doctorName, whatsappNumber] = doctorValue.split('|');
+
+            // Validar que la fecha y hora seleccionada no sea pasada
+            const selectedDateTime = new Date(`${date}T${time}:00`);
+            const now = new Date();
+
+            if (selectedDateTime < now) {
+                showModal('⚠️ Error de Cita', 'No puedes seleccionar una fecha u hora que ya ha pasado. Por favor, elige una hora y fecha a partir de ahora.');
+                return;
+            }
+
+            // Formatear la fecha a un formato más legible (DD/MM/AAAA)
+            const dateParts = date.split('-');
+            const formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+
+            // CREACIÓN DEL MENSAJE (ahora incluyendo el nombre del doctor)
+            let message = `*¡NUEVA SOLICITUD DE CITA!*\n\n`;
+            message += `*Especialidad:* ${specialty}\n`;
+            message += `*Doctor/a:* ${doctorName}\n`;
+            message += `*Cliente:* ${clientName}\n`;
+            message += `*Fecha Solicitada:* ${formattedDate}\n`;
+            message += `*Hora Solicitada:* ${time}\n\n`; 
+            message += `*¡Por favor, confírmame esta cita!*`;
+
+            // Codificar el mensaje para la URL
+            const encodedMessage = encodeURIComponent(message);
+
+            // Crear el enlace de WhatsApp usando el número del doctor seleccionado
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            // Abrir el enlace en una nueva pestaña
+            window.open(whatsappUrl, '_blank');
+
+            // Mostrar mensaje de éxito/instrucción
+            const successMessage = document.getElementById('success-message');
+            successMessage.classList.remove('hidden');
+            
+            // Opcional: limpiar el formulario y resetear Tom Selects
+            document.getElementById('appointment-form').reset();
+            specialtyTomSelect.setValue('');
+            doctorTomSelect.clearOptions();
+            doctorTomSelect.disable();
+
+            setTimeout(() => {
+                successMessage.classList.add('hidden');
+            }, 5000);
+        });
+
+        // Nueva función para mostrar el modal de error/validación
+        function showModal(title, body) {
+             const existingModal = document.querySelector('.fixed.inset-0.z-50');
+             if(existingModal) existingModal.remove();
+
+             const validationMessage = document.createElement('div');
+             validationMessage.className = 'fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50';
+             validationMessage.innerHTML = `
+                 <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm text-center">
+                     <h3 class="text-xl font-bold mb-3 text-red-600">${title}</h3>
+                     <p class="mb-4 text-gray-700">${body}</p>
+                     <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-150" onclick="this.parentElement.parentElement.remove()">Entendido</button>
+                 </div>
+             `;
+             document.body.appendChild(validationMessage);
+        }
+    </script>
 </body>
 </html>
